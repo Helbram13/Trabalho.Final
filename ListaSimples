@@ -1,0 +1,176 @@
+package ListaSimples;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+public class ListaSimples implements IListaSimples {
+    private Integer[] itens;
+    private int tamanhoAtual = 0;
+
+    public ListaSimples(int capacidadeInicial) {
+        this.itens = new Integer[capacidadeInicial];
+    }
+
+    @Override
+    public void inserirElemento(Object elemento) {
+        if (estaCheia()) {
+            aumentarCapacidade();
+        }
+        itens[tamanhoAtual++] = (Integer) elemento;
+    }
+
+    @Override
+    public void inserirElementoIndice(Object elemento, int indice) {
+        if (indice < 0 || indice > tamanhoAtual) {
+            throw new IndexOutOfBoundsException("Índice fora do intervalo.");
+        }
+
+        if (estaCheia()) {
+            aumentarCapacidade();
+        }
+
+        for (int i = tamanhoAtual; i > indice; i--) {
+            itens[i] = itens[i - 1];
+        }
+
+        itens[indice] = (Integer) elemento;
+        tamanhoAtual++;
+    }
+
+    @Override
+    public void inserirSequencia(Object elementos) {
+        Integer[] novos = (Integer[]) elementos;
+        for (Integer e : novos) {
+            inserirElemento(e); // Reaproveita o método já pronto
+        }
+    }
+
+    @Override
+    public boolean removerElemento() {
+        if (estaVazia()) return false;
+        itens[--tamanhoAtual] = null;
+        return true;
+    }
+
+    @Override
+    public Object removerIndice(int indice) {
+        if (indice < 0 || indice >= tamanhoAtual) {
+            throw new IndexOutOfBoundsException("Índice fora do intervalo.");
+        }
+
+        Integer valorRemovido = itens[indice];
+
+        for (int i = indice; i < tamanhoAtual - 1; i++) {
+            itens[i] = itens[i + 1];
+        }
+
+        itens[--tamanhoAtual] = null;
+        return valorRemovido;
+    }
+
+    @Override
+    public void removerSequencia(Object elementos) {
+        Integer[] alvos = (Integer[]) elementos;
+        for (Integer alvo : alvos) {
+            removerTodasOcorrencias(alvo);
+        }
+    }
+
+    @Override
+    public void removerTodasOcorrencias(Object elemento) {
+        for (int i = 0; i < tamanhoAtual; i++) {
+            if (itens[i].equals(elemento)) {
+                removerIndice(i);
+                i--; // Voltar uma posição para revisar o deslocamento
+            }
+        }
+    }
+
+    @Override
+    public boolean estaCheia() {
+        return tamanhoAtual == itens.length;
+    }
+
+    @Override
+    public boolean estaVazia() {
+        return tamanhoAtual == 0;
+    }
+
+    @Override
+    public boolean buscarElemento(Object elemento) {
+        for (int i = 0; i < tamanhoAtual; i++) {
+            if (itens[i].equals(elemento)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Object buscarElementoIndice(int indice) {
+        if (indice < 0 || indice >= tamanhoAtual) {
+            throw new IndexOutOfBoundsException("Índice inválido.");
+        }
+        return itens[indice];
+    }
+
+    @Override
+    public void ordenarCrescente() {
+        Arrays.sort(itens, 0, tamanhoAtual);
+    }
+
+    @Override
+    public void ordenarDecrescente() {
+        Arrays.sort(itens, 0, tamanhoAtual, Collections.reverseOrder());
+    }
+
+    @Override
+    public int quantidadeElementos() {
+        return tamanhoAtual;
+    }
+
+    @Override
+    public void dobrarCapacidade() {
+        aumentarCapacidade();
+    }
+
+    private void aumentarCapacidade() {
+        int novaCapacidade = itens.length * 2;
+        itens = Arrays.copyOf(itens, novaCapacidade);
+    }
+
+    @Override
+    public void editarElemento(Object antigo, Object novoValor) {
+        for (int i = 0; i < tamanhoAtual; i++) {
+            if (itens[i].equals(antigo)) {
+                itens[i] = (Integer) novoValor;
+            }
+        }
+    }
+
+    @Override
+    public void limpar() {
+        for (int i = 0; i < tamanhoAtual; i++) {
+            itens[i] = null;
+        }
+        tamanhoAtual = 0;
+    }
+
+    @Override
+    public void exibir() {
+        for (int i = 0; i < tamanhoAtual; i++) {
+            System.out.print(itens[i] + " ");
+        }
+        System.out.println();
+    }
+
+    @Override
+    public Object obterPrimeiroElemento() {
+        return estaVazia() ? null : itens[0];
+    }
+
+    @Override
+    public Object obterUltimoElemento() {
+        return estaVazia() ? null : itens[tamanhoAtual - 1];
+    }
+}
