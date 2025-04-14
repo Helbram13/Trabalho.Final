@@ -1,0 +1,170 @@
+package ListaSimples;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ListaSimples lista = new ListaSimples(5);
+
+        int opcao;
+        do {
+            System.out.println("\n--- MENU LISTA SIMPLES ---");
+            System.out.println("1. Inserir elemento");
+            System.out.println("2. Inserir elemento em índice");
+            System.out.println("3. Inserir sequência");
+            System.out.println("4. Remover último elemento");
+            System.out.println("5. Remover por índice");
+            System.out.println("6. Remover sequência");
+            System.out.println("7. Remover todas as ocorrências");
+            System.out.println("8. Buscar elemento");
+            System.out.println("9. Buscar por índice");
+            System.out.println("10. Editar elemento");
+            System.out.println("11. Ordenar crescente");
+            System.out.println("12. Ordenar decrescente");
+            System.out.println("13. Exibir lista");
+            System.out.println("14. Limpar lista");
+            System.out.println("15. Ver primeiro e último elemento");
+            System.out.println("0. Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = sc.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    System.out.print("Digite o valor: ");
+                    int val1 = sc.nextInt();
+                    lista.inserirElemento(val1);
+                    System.out.println("Exibindo lista:");
+                    lista.exibir();
+                    break;
+
+                case 2:
+                    System.out.print("Valor: ");
+                    int val2 = sc.nextInt();
+                    System.out.print("Índice: ");
+                    int ind2 = sc.nextInt();
+                    if (ind2 < 0 || ind2 > lista.quantidadeElementos()) {
+                        System.out.println("Índice inválido. Operação cancelada.");
+                    } else {
+                        lista.inserirElementoIndice(val2, ind2);
+                        lista.exibir();
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Quantos elementos deseja inserir? ");
+                    int n = sc.nextInt();
+                    Integer[] valores = new Integer[n];
+                    for (int i = 0; i < n; i++) {
+                        System.out.print("Valor " + (i + 1) + ": ");
+                        valores[i] = sc.nextInt();
+                    }
+                    lista.inserirSequencia(valores);
+                    lista.exibir();
+                    break;
+
+                case 4:
+                    boolean removido = lista.removerElemento();
+                    if (!removido) {
+                        System.out.println("Lista já está vazia.");
+                    }
+                    lista.exibir();
+                    break;
+
+                case 5:
+                    System.out.print("Índice: ");
+                    int ind5 = sc.nextInt();
+                    if (ind5 < 0 || ind5 >= lista.quantidadeElementos()) {
+                        System.out.println("Índice inválido. Operação cancelada.");
+                    } else {
+                        Object valRemovido = lista.removerIndice(ind5);
+                        System.out.println("Removido: " + valRemovido);
+                        lista.exibir();
+                    }
+                    break;
+
+                case 6:
+                    System.out.print("Quantidade de elementos a remover: ");
+                    int qtd6 = sc.nextInt();
+                    Integer[] seqRemover = new Integer[qtd6];
+                    for (int i = 0; i < qtd6; i++) {
+                        System.out.print("Valor " + (i + 1) + ": ");
+                        seqRemover[i] = sc.nextInt();
+                    }
+                    lista.removerSequencia(seqRemover);
+                    lista.exibir();
+                    break;
+
+                case 7:
+                    System.out.print("Valor a remover completamente: ");
+                    int val7 = sc.nextInt();
+                    lista.removerTodasOcorrencias(val7);
+                    lista.exibir();
+                    break;
+
+                case 8:
+                    System.out.print("Valor para buscar: ");
+                    int val8 = sc.nextInt();
+                    boolean achou = lista.buscarElemento(val8);
+                    System.out.println(achou ? "Encontrado." : "Não encontrado.");
+                    break;
+
+                case 9:
+                    System.out.print("Índice: ");
+                    int ind9 = sc.nextInt();
+                    if (ind9 < 0 || ind9 >= lista.quantidadeElementos()) {
+                        System.out.println("Índice inválido. Operação cancelada.");
+                    } else {
+                        System.out.println("Valor: " + lista.buscarElementoIndice(ind9));
+                    }
+                    break;
+
+                case 10:
+                    System.out.print("Valor antigo: ");
+                    int antigo = sc.nextInt();
+                    System.out.print("Novo valor: ");
+                    int novo = sc.nextInt();
+                    lista.editarElemento(antigo, novo);
+                    lista.exibir();
+                    break;
+
+                case 11:
+                    lista.ordenarCrescente();
+                    System.out.println("Lista ordenada em ordem crescente.");
+                    lista.exibir();
+                    break;
+
+                case 12:
+                    lista.ordenarDecrescente();
+                    System.out.println("Lista ordenada em ordem decrescente.");
+                    lista.exibir();
+                    break;
+
+                case 13:
+                    System.out.print("Conteúdo da lista: ");
+                    lista.exibir();
+                    break;
+
+                case 14:
+                    lista.limpar();
+                    System.out.println("Lista limpa.");
+                    lista.exibir();
+                    break;
+
+                case 15:
+                    System.out.println("Primeiro: " + lista.obterPrimeiroElemento());
+                    System.out.println("Último: " + lista.obterUltimoElemento());
+                    break;
+
+                case 0:
+                    System.out.println("Encerrando programa...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida.");
+                    break;
+            }
+
+        } while (opcao != 0);
+    }
+}
